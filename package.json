@@ -1,0 +1,15 @@
+{
+  "name": "outlier-finder",
+  "version": "1.3.0",
+  "private": true,
+  "description": "Post scoring Chrome extension for YouTube, X and Instagram",
+  "scripts": {
+    "test": "node scripts/test.mjs",
+    "validate": "node scripts/validate.mjs",
+    "package": "node scripts/package.mjs",
+    "release": "npm test && npm run validate && npm run package"
+  },
+  "devDependencies": {
+    "jsdom": "29.1.1"
+  }
+}
