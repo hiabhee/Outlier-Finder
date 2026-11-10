@@ -47,10 +47,11 @@
     post.cardElement.dataset.ofReason = payload.reason || "";
     state.badges.render(post, Object.assign({}, payload, { settings: state.settings, growth: state.growth.get(post.videoId) || null }));
     const badge = (post.thumbnailElement || post.cardElement).querySelector(".of-badge");
-    if (badge && post.isReelViewer) badge.classList.add("of-badge--reel");
-    else if (badge && !post.cardElement.matches("a")) {
+    if (badge && platform === "x") badge.classList.add("of-badge--x-line");
+    else if (badge && post.isReelViewer) badge.classList.add("of-badge--reel");
+    else if (badge && !post.cardElement.matches("a") && post.cardElement.dataset.ofGridTile !== "1") {
       badge.classList.add("of-badge--post");
-      if (platform === "instagram" && post.cardElement.dataset.ofGridTile !== "1" && badge.parentElement === post.cardElement && post.cardElement.firstElementChild !== badge) post.cardElement.prepend(badge);
+      if (platform === "instagram" && badge.parentElement === post.cardElement && post.cardElement.firstElementChild !== badge) post.cardElement.prepend(badge);
     }
   }
 
@@ -106,7 +107,7 @@
         if (payload) for (const current of state.cards.values()) if (current.videoId === post.videoId) render(current, payload);
       });
     }
-    const signature = JSON.stringify([post.views, post.likes, post.channel && post.channel.key, post.channel && post.channel.followerCount]);
+    const signature = JSON.stringify([post.views, post.likes, post.channel && post.channel.key, post.channel && post.channel.followerCount, post.metadataRestricted]);
     const cached = state.results.get(post.videoId);
     if (!force && cached && cached.signature === signature && cached.revision === state.revision && cached.expiresAt > Date.now()) {
       render(post, cached.payload); return;

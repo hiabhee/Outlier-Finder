@@ -470,10 +470,37 @@
 }
 
 /* Post badges sit in the card's flow to preserve media, links and action buttons. */
+.of-x-badge-line {
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  flex: 0 0 auto !important;
+  margin: 4px 0 6px !important;
+}
+.of-x-badge-line:empty { display: none !important; }
+.of-badge.of-badge--x-line {
+  position: static !important;
+  margin: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  flex-wrap: wrap !important;
+  white-space: normal !important;
+  padding: 3px 5px !important;
+  font-size: 9px !important;
+}
+.of-badge--x-line .of-badge__score { font-size: 10px !important; }
+.of-badge--x-line .of-badge__growth { font-size: 9px !important; }
+
 .of-badge.of-badge--post {
   position: relative !important; top: auto !important; left: auto !important;
   margin: 8px 12px !important; align-self: flex-start !important;
   flex: 0 0 auto !important; min-height: 24px !important;
+  max-width: calc(100% - 24px) !important;
+  box-sizing: border-box !important;
+  flex-wrap: wrap !important;
+  white-space: normal !important;
 }
 
 .of-panel__actions { flex-wrap: wrap !important; }

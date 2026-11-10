@@ -19,4 +19,12 @@ npm run package
 
 Run `npm run release` before uploading. The Web Store submission checklist, proposed listing text and reviewer instructions are in [store/submission.md](store/submission.md). Host `dist/site/` on a public HTTPS website and enter its privacy URL in the Web Store dashboard. Live compatibility and real product screenshots must be checked before submission.
 
+## Load and update in Chrome
+
+For development, open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select this repository root (the folder containing `manifest.json`). This loads source files directly.
+
+For release testing, load `dist/unpacked` after running `npm run release`. If Chrome already loads the legacy nested `outlier-finder/` folder, run the release command to refresh that generated copy. In all cases, click the extension's **Reload** button and refresh the supported website tabs after changing code. Refreshing the website alone does not reload extension code.
+
+See [store/release-check.md](store/release-check.md) for the latest local verification and remaining submission steps. Upload the release ZIP, not the repository or its generated parent directories.
+
 Publisher: hiabhee · Support: jamdadeabhishek039@gmail.com

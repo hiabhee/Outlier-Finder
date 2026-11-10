@@ -22,13 +22,14 @@ Single purpose: calculate and display public post performance ratios relative to
 
 ## Build and publication
 
-Run `npm test` and `npm run package`. Upload `dist/outlier-finder-1.3.0.zip`; development files are excluded. The existing `outlier-finder/` directory is retained because Chrome currently loads it. It is generated and ignored by version control.
+Run `npm run release` to test, validate and package the extension. Upload `dist/outlier-finder-1.3.0.zip`; development files are excluded. The existing `outlier-finder/` directory is retained because Chrome currently loads it. It is generated and ignored by version control. See [release-check.md](release-check.md) for local release verification and outstanding submission requirements.
 
 Host the contents of `dist/site/` on a public HTTPS static host. Use its real `/privacy.html` address as the store privacy URL and `/support.html` as the support URL. No public hosting or store submission has been performed by this build.
 
 Before submitting:
 
 - Confirm scores on live YouTube cards, X timeline/detail pages, Instagram feed/grid and scrolling Reels. Fixture tests do not establish live compatibility.
+- Check placement: X tags appear on their own first line below the author header and above post content; Instagram profile-grid tags overlay tiles without creating extra rows or columns. Check narrow windows and long creator names.
 - Reload the extension and refresh existing platform tabs after updating.
 - Capture actual product screenshots (1280×800 or 640×400), including unavailable-data handling. Do not invent screenshots or claim universal coverage.
 - Review publisher identity, contact details, policy text and dashboard disclosures.

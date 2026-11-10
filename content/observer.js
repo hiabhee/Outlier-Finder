@@ -153,9 +153,10 @@
         const previous = this.videoByCard.get(card);
         const fingerprint = OF.extractor.fingerprint ? OF.extractor.fingerprint(card) : null;
         const badgeScope = previous && previous.thumbnailElement;
+        const detachedHost = badgeScope && !badgeScope.isConnected;
         const badges = [...card.querySelectorAll(".of-badge"), ...(badgeScope && badgeScope !== card ? badgeScope.querySelectorAll(".of-badge") : [])];
         const missingBadge = card.dataset.ofBadgeExpected === "1" && !badges.some((badge) => badge.isConnected && badge.dataset.ofVideoId === parsed.videoId);
-        if (!missingBadge && knownId === parsed.videoId && card.dataset.ofProcessed === "1" &&
+        if (!missingBadge && !detachedHost && knownId === parsed.videoId && card.dataset.ofProcessed === "1" &&
             previous && (fingerprint !== null ? previous.fingerprint === fingerprint :
               previous.views !== null && previous.channel && previous.channel.url)) continue;
 

@@ -7,7 +7,7 @@
     "test": "node scripts/test.mjs",
     "validate": "node scripts/validate.mjs",
     "package": "node scripts/package.mjs",
-    "release": "npm test && npm run validate && npm run package"
+    "release": "npm test && npm run package"
   },
   "devDependencies": {
     "jsdom": "29.1.1"

@@ -41,6 +41,25 @@ test('view and likes ratios keep distinct units and thresholds', () => {
   assert.equal(OF.social.evaluatePost({ views: 1, likes: 500 }, { followerCount: 0 }, settings).score, null);
 });
 
+test('X badges occupy the first line above post text below the author header', async () => {
+  const html = xHtml.replace('<div data-testid="User-Name">', '<div style="display:flex"><div>Avatar</div><div id="post-content" style="display:flex;flex-direction:column"><div data-testid="User-Name">')
+    .replace('<div data-testid="tweetText">A useful post about making things.</div>', '<div id="text-row" style="display:flex;flex-direction:row"><div data-testid="tweetText">A useful post about making things.</div></div>')
+    .replace('</article>', '</div></div></article>');
+  const app = await bootSocial({ html, stored: profile('x') });
+  try {
+    await app.waitFor(() => result(app)?.state === 'scored');
+    const badge = app.window.document.querySelector('.of-badge');
+    assert.ok(badge.parentElement.classList.contains('of-x-badge-line'));
+    assert.equal(badge.parentElement.parentElement.id, 'post-content');
+    assert.equal(badge.parentElement.previousElementSibling.dataset.testid, 'User-Name');
+    assert.equal(badge.parentElement.nextElementSibling.id, 'text-row');
+    assert.ok(badge.classList.contains('of-badge--x-line'));
+    assert.equal(badge.classList.contains('of-badge--post'), false);
+    assert.equal(app.window.document.querySelector('article > .of-badge'), null);
+    assert.equal(app.window.document.querySelector('#text-row .of-badge'), null);
+  } finally { app.close(); }
+});
+
 test('X post cards show views/followers and ignore quoted-post metrics', async () => {
   const app = await bootSocial({ html: xHtml, stored: profile('x') });
   try {
@@ -187,6 +206,7 @@ test('an Instagram profile grid uses its own follower count and gives each tile 
     assert.deepEqual([...app.window.document.querySelectorAll('.of-badge__score')].map((node) => node.textContent).sort(), ['10x', '20x']);
     assert.equal(app.requests.length, 0);
     for (const badge of app.window.document.querySelectorAll('.of-badge')) assert.equal(badge.closest('a'), null);
+    for (const badge of app.window.document.querySelectorAll('.of-badge')) assert.equal(badge.classList.contains('of-badge--post'), false, 'grid badges overlay media without adding tile height');
   } finally { app.close(); }
 });
 
@@ -394,4 +414,23 @@ test('X embedded users with relationship counts preserve creator identity', () =
   assert.equal(entries.length, 1);
   assert.equal(entries[0].ref.key, 'x:alice');
   assert.equal(entries[0].followerCount, 52800);
+});
+
+test('Instagram adjacent count buttons score multiple feed videos and update after hydration', async () => {
+  const makePost = (id, count) => igHtml.match(/<article>[\s\S]*<\/article>/)[0]
+    .replaceAll('AbCd_123', id)
+    .replace('<section><a href="/p/' + id + '/liked_by/"><span>500 likes</span></a></section>', '')
+    .replace('<section><button aria-label="Like"><svg aria-label="Like"></svg></button></section>',
+      '<div><button aria-label="Like"><svg aria-label="Like"></svg></button><button class="like-count">' + count + '</button><button aria-label="Comment"><svg aria-label="Comment"></svg></button><button>355</button><button aria-label="Share"><svg aria-label="Share"></svg></button><button>69K</button></div>');
+  const app = await bootSocial({ html: '<main>' + makePost('AbCd_123', '1.3K') + makePost('DeFg_456', '') + '</main>',
+    url: 'https://www.instagram.com/', stored: profile('instagram') });
+  try {
+    await app.waitFor(() => app.window.document.querySelector('article .of-badge--scored'));
+    assert.equal(app.window.document.querySelector('.of-badge__score').textContent, '13%');
+    const second = app.window.document.querySelectorAll('article')[1];
+    second.querySelector('.like-count').textContent = '66.2K';
+    await app.waitFor(() => second.querySelector('.of-badge--scored'));
+    assert.equal(second.querySelector('.of-badge__score').textContent, '662%');
+    assert.equal(app.window.document.querySelectorAll('.of-badge--scored').length, 2);
+  } finally { app.close(); }
 });

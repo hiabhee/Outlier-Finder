@@ -234,6 +234,17 @@
       }
     }
     if (platform === "instagram") {
+      // Some feed controls put the like count in its own adjacent button.
+      if (name === "likes") for (const icon of card.querySelectorAll('[aria-label="Like"], [aria-label="Unlike"]')) {
+        if (!owns(card, icon) || icon.closest('header, h1, [data-testid=post-caption], ul, [role=list]')) continue;
+        const control = icon.closest('button, [role="button"]');
+        const counter = control && control.nextElementSibling;
+        if (!counter?.matches('button, [role="button"]') || counter.querySelector('svg, time, a')) continue;
+        const text = V.normalizeText(counter.textContent);
+        if (!/^[\d.,]+\s*[KMB]?$/i.test(text)) continue;
+        const count = countIn(counter, name, true);
+        if (count !== null) return count;
+      }
       for (const icon of card.querySelectorAll('svg[aria-label]')) {
         if (!owns(card, icon) || icon.closest("header, h1, [data-testid=post-caption]") || (card.dataset.ofGridTile !== "1" && icon.closest("ul, [role=list]"))) continue;
         const label = icon.getAttribute("aria-label") || "";
@@ -280,6 +291,23 @@
     return null;
   }
 
+  function xBadgeHost(card) {
+    const author = [...card.querySelectorAll('[data-testid="User-Name"]')].find((node) => owns(card, node));
+    const content = [...card.querySelectorAll('[data-testid="tweetText"], [data-testid="tweetPhoto"], [role="group"]')].find((node) => owns(card, node));
+    let container = content?.parentElement || author?.parentElement || card;
+    while (container !== card && author && !container.contains(author)) container = container.parentElement;
+    let host = container.querySelector(':scope > .of-x-badge-line');
+    if (!host) {
+      host = document.createElement('div');
+      host.className = 'of-x-badge-line';
+      let firstContent = content;
+      while (firstContent && firstContent.parentElement !== container) firstContent = firstContent.parentElement;
+      if (firstContent) firstContent.before(host);
+      else container.appendChild(host);
+    }
+    return host;
+  }
+
   function extractVideoCard(card) {
     const ref = identity(card);
     if (!ref) return null;
@@ -303,7 +331,11 @@
       thumbnailUrl: image ? image.currentSrc || image.src : "",
       publishedText: time ? time.getAttribute("title") || time.textContent : "",
       ageDays: Number.isFinite(publishedAt) ? Math.max(0, (Date.now() - publishedAt) / 86400000) : null,
-      cardElement: card, thumbnailElement: viewer ? reelOverlay : card.matches("a[href]") ? card.parentElement : card,
+      // X articles lay their children out horizontally. Keep the badge inside
+      // the existing content column instead of creating another article column.
+      cardElement: card, thumbnailElement: viewer ? reelOverlay : platform === "x"
+        ? xBadgeHost(card)
+        : card.matches("a[href]") ? card.parentElement : card,
       isReelViewer: !!viewer, mediaElement: viewer ? viewer.video : null,
       isShort: false, isLive: false
     });
@@ -370,7 +402,7 @@
 
   OF.extractor = { findVideoCards, getCardVideoId: identity, extractVideoCard, fingerprint(card) {
     const post = extractVideoCard(card);
-    return post ? JSON.stringify([post.videoId, post.views, post.likes, post.channel && post.channel.key, post.channel && post.channel.followerCount]) : "";
+    return post ? JSON.stringify([post.videoId, post.views, post.likes, post.channel && post.channel.key, post.channel && post.channel.followerCount, post.metadataRestricted]) : "";
   } };
   OF.socialExtractor = { visibleProfiles, metric, collectEmbeddedPosts, isCurrentReel };
 })(typeof globalThis !== "undefined" ? globalThis : this);

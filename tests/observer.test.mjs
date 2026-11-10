@@ -44,3 +44,17 @@ test('a recycled card is processed with its new video identity', () => {
   assert.equal(f.processed[1].videoId, 'abcdefghijk');
   assert.equal(f.card.dataset.ofVideoId, 'abcdefghijk');
 });
+
+test('replaced media containers are re-extracted even when the video metadata is unchanged', () => {
+  const f = fixture();
+  const oldHost = { isConnected: true, querySelectorAll: () => [] };
+  f.update({ videoId: 'dQw4w9WgXcQ', views: 420000, channel: { url: '/@creator' }, thumbnailElement: oldHost });
+  f.observer.scan();
+  oldHost.isConnected = false;
+  const newHost = { isConnected: true, querySelectorAll: () => [] };
+  f.update({ videoId: 'dQw4w9WgXcQ', views: 420000, channel: { url: '/@creator' }, thumbnailElement: newHost });
+  f.observer.scan();
+  f.observer.scan();
+  assert.equal(f.processed.length, 2);
+  assert.equal(f.processed[1].thumbnailElement, newHost);
+});
