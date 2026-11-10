@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Outlier Finder</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="ofp-header">
+      <div class="ofp-brand">
+        <div class="ofp-logo" aria-hidden="true">OF</div>
+        <div class="ofp-brand-text">
+          <h1>Outlier Finder</h1>
+          <p id="ofp-subtitle">Posts punching above their creators’ reach</p>
+        </div>
+      </div>
+      <label class="ofp-switch" title="Enable or disable detection">
+        <input type="checkbox" id="ofp-enabled" aria-label="Enable Outlier Finder" />
+        <span class="ofp-slider"></span>
+      </label>
+    </header>
+
+    <section class="ofp-stats" aria-label="Overview">
+      <div class="ofp-stat">
+        <span class="ofp-stat-value" id="ofp-scanned">0</span>
+        <span class="ofp-stat-label">Posts scanned</span>
+      </div>
+      <div class="ofp-stat">
+        <span class="ofp-stat-value ofp-stat-value--green" id="ofp-outliers">0</span>
+        <span class="ofp-stat-label">Outliers found</span>
+      </div>
+      <div class="ofp-stat">
+        <span class="ofp-stat-value ofp-stat-value--amber" id="ofp-highest">—</span>
+        <span class="ofp-stat-label">Highest score</span>
+      </div>
+      <div class="ofp-stat">
+        <span class="ofp-stat-value" id="ofp-channels">0</span>
+        <span class="ofp-stat-label">Creators seen</span>
+      </div>
+    </section>
+
+    <section class="ofp-status" aria-live="polite">
+      <p id="ofp-status">Connecting to this tab…</p>
+      <p id="ofp-status-detail"></p>
+    </section>
+
+    <section class="ofp-filters" aria-label="Quick filters">
+      <button type="button" class="ofp-chip is-active" data-filter="all">All</button>
+      <button type="button" class="ofp-chip" data-filter="5">5x+</button>
+      <button type="button" class="ofp-chip" data-filter="10">10x+</button>
+      <button type="button" class="ofp-chip" data-filter="30">30x+</button>
+      <button type="button" class="ofp-chip" data-filter="50">50x+</button>
+    </section>
+
+    <div class="ofp-selectors">
+      <label>Platform <select id="ofp-platform"><option value="all">All platforms</option><option value="youtube">YouTube</option><option value="x">X</option><option value="instagram">Instagram</option></select></label>
+      <label>Metric <select id="ofp-metric"><option value="all">All metrics</option><option value="views">Views score</option><option value="likes">Likes engagement</option></select></label>
+    </div>
+
+    <section class="ofp-list-wrap">
+      <div class="ofp-list-head">
+        <h2>Recent outliers</h2>
+        <span id="ofp-list-count">0</span>
+      </div>
+      <div class="ofp-list" id="ofp-list" aria-live="polite"></div>
+      <div class="ofp-empty" id="ofp-empty">
+        <div class="ofp-empty-icon" aria-hidden="true">◎</div>
+        <p id="ofp-empty-title">No outliers yet</p>
+        <p id="ofp-empty-text">Open YouTube and browse your homepage. Qualifying videos will show up here.</p>
+      </div>
+    </section>
+
+    <footer class="ofp-footer">
+      <button type="button" class="ofp-footer-btn" id="ofp-options">Settings</button>
+      <button type="button" class="ofp-footer-btn" id="ofp-clear">Clear cache</button>
+      <span class="ofp-saved" id="ofp-saved">0 saved</span>
+    </footer>
+
+    <nav aria-label="Help"><a href="../pages/privacy.html" target="_blank" rel="noopener">Privacy</a> · <a href="../pages/support.html" target="_blank" rel="noopener">Support</a> · <a href="../pages/terms.html" target="_blank" rel="noopener">Terms</a></nav>
+    <script src="../core/settings.js"></script>
+    <script src="../core/dataValidator.js"></script>
+    <script src="../core/outlierCalculator.js"></script>
+    <script src="../core/classification.js"></script>
+    <script src="../core/social.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

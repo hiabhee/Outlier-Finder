@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Outlier Finder — Settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <div class="ofo-page">
+      <header class="ofo-header">
+        <div class="ofo-brand">
+          <div class="ofo-logo" aria-hidden="true">⚡</div>
+          <div>
+            <h1>Outlier Finder</h1>
+            <p>Detection settings</p>
+          </div>
+        </div>
+        <a class="ofo-link" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">Open YouTube</a>
+      </header>
+
+      <main class="ofo-main">
+        <form id="ofo-form" novalidate>
+          <section class="ofo-card">
+            <div class="ofo-card-head">
+              <h2>Detection</h2>
+              <p>Control when and where Outlier Finder scans.</p>
+            </div>
+            <div class="ofo-row">
+              <label for="ofo-enabled">Enable detection</label>
+              <input type="checkbox" id="ofo-enabled" />
+            </div>
+            <div class="ofo-row"><label for="ofo-xEnabled">Scan X posts</label><input type="checkbox" id="ofo-xEnabled" /></div>
+            <div class="ofo-row"><label for="ofo-instagramEnabled">Scan Instagram posts</label><input type="checkbox" id="ofo-instagramEnabled" /></div>
+            <div class="ofo-row">
+              <label for="ofo-scanShorts">Scan Shorts</label>
+              <input type="checkbox" id="ofo-scanShorts" />
+            </div>
+            <div class="ofo-row">
+              <label for="ofo-scanLive">Scan live streams</label>
+              <input type="checkbox" id="ofo-scanLive" />
+            </div>
+          </section>
+
+          <section class="ofo-card">
+            <div class="ofo-card-head"><h2>Social post engagement</h2><p>Use public views ÷ followers when available. Posts without views can show likes ÷ followers as a percentage.</p></div>
+            <div class="ofo-row"><label for="ofo-socialLikeFallback">Use likes when public views are unavailable</label><input type="checkbox" id="ofo-socialLikeFallback" /></div>
+            <div class="ofo-grid">
+              <label class="ofo-field"><span>Minimum likes for engagement highlights</span><input type="number" id="ofo-socialMinLikes" min="0" step="10" /></label>
+              <label class="ofo-field"><span>Minimum engagement (%)</span><input type="number" id="ofo-socialMinEngagementPercent" min="0" step="0.5" /></label>
+            </div>
+            <p>Engagement colors use 2%, 5%, 10% and 20% likes per follower as heuristic levels. View-score filters apply only to views-based scores.</p>
+          </section>
+
+          <section class="ofo-card">
+            <div class="ofo-card-head">
+              <h2>Outlier thresholds</h2>
+              <p>A views-based post must pass all three minimums before it gets an outlier badge.</p>
+            </div>
+            <div class="ofo-grid">
+              <label class="ofo-field">
+                <span>Minimum views</span>
+                <input type="number" id="ofo-minViews" min="0" step="500" />
+              </label>
+              <label class="ofo-field">
+                <span>Minimum subscribers / followers</span>
+                <input type="number" id="ofo-minSubscribers" min="0" step="50" />
+              </label>
+              <label class="ofo-field">
+                <span>Minimum view score (x)</span>
+                <input type="number" id="ofo-minScore" min="0" step="0.5" />
+              </label>
+            </div>
+          </section>
+
+          <section class="ofo-card">
+            <div class="ofo-card-head">
+              <h2>View-score classification thresholds</h2>
+              <p>Scores at or above each value receive that classification. Keep them in ascending order.</p>
+            </div>
+            <div class="ofo-grid">
+              <label class="ofo-field">
+                <span>Above average</span>
+                <input type="number" id="ofo-aboveAverage" min="0.1" step="0.5" />
+              </label>
+              <label class="ofo-field">
+                <span>Potential outlier</span>
+                <input type="number" id="ofo-potential" min="0.1" step="0.5" />
+              </label>
+              <label class="ofo-field">
+                <span>Viral outlier</span>
+                <input type="number" id="ofo-viral" min="0.1" step="1" />
+              </label>
+              <label class="ofo-field">
+                <span>Strong outlier</span>
+                <input type="number" id="ofo-strong" min="0.1" step="1" />
+              </label>
+              <label class="ofo-field">
+                <span>Massive outlier</span>
+                <input type="number" id="ofo-massive" min="0.1" step="1" />
+              </label>
+            </div>
+            <div class="ofo-legend">
+              <span class="ofo-dot ofo-dot--potential"></span> Potential
+              <span class="ofo-dot ofo-dot--viral"></span> Viral
+              <span class="ofo-dot ofo-dot--strong"></span> Strong
+              <span class="ofo-dot ofo-dot--massive"></span> Massive
+            </div>
+          </section>
+
+          <section class="ofo-card">
+            <div class="ofo-card-head">
+              <h2>Badge display</h2>
+              <p>Choose which classifications appear on thumbnails.</p>
+            </div>
+            <div class="ofo-checks">
+              <label><input type="checkbox" id="ofo-badgeVisible" /> Show badges</label>
+              <label><input type="checkbox" id="ofo-showAllScores" /> Show scores on all posts and videos</label>
+              <label><input type="checkbox" id="ofo-showPotential" /> Potential outliers</label>
+              <label><input type="checkbox" id="ofo-showViral" /> Viral outliers</label>
+              <label><input type="checkbox" id="ofo-showStrong" /> Strong outliers</label>
+              <label><input type="checkbox" id="ofo-showMassive" /> Massive outliers</label>
+              <label><input type="checkbox" id="ofo-showAboveAverage" /> Above-average posts</label>
+              <label><input type="checkbox" id="ofo-showNormal" /> Normal posts</label>
+              <label><input type="checkbox" id="ofo-showUnavailable" /> “Data unavailable” markers</label>
+            </div>
+          </section>
+
+          <section class="ofo-card">
+            <div class="ofo-card-head">
+              <h2>Caching and performance</h2>
+              <p>Cached channel data keeps profile requests down.</p>
+            </div>
+            <div class="ofo-row">
+              <label for="ofo-cacheEnabled">Enable caching</label>
+              <input type="checkbox" id="ofo-cacheEnabled" />
+            </div>
+            <div class="ofo-grid">
+              <label class="ofo-field">
+                <span>Subscriber / follower cache (hours)</span>
+                <input type="number" id="ofo-subscriberCacheHours" min="0.1" step="1" />
+              </label>
+              <label class="ofo-field">
+                <span>Failure cache (minutes)</span>
+                <input type="number" id="ofo-failureCacheMinutes" min="1" step="5" />
+              </label>
+              <label class="ofo-field">
+                <span>Max concurrent requests</span>
+                <input type="number" id="ofo-maxConcurrent" min="1" max="8" step="1" />
+              </label>
+              <label class="ofo-field">
+                <span>Min request interval (ms)</span>
+                <input type="number" id="ofo-minIntervalMs" min="0" max="10000" step="50" />
+              </label>
+              <label class="ofo-field">
+                <span>Recent outliers kept</span>
+                <input type="number" id="ofo-maxRecentOutliers" min="10" max="1000" step="10" />
+              </label>
+            </div>
+          </section>
+
+          <div class="ofo-actions">
+            <button type="submit" class="ofo-btn ofo-btn--primary">Save settings</button>
+            <button type="button" class="ofo-btn" id="ofo-reset">Reset to defaults</button>
+            <span class="ofo-status" id="ofo-status" role="status"></span>
+          </div>
+        </form>
+
+        <section class="ofo-note">
+          <h2>How scoring works</h2>
+          <p>
+            Outlier score = video views ÷ channel subscribers. A 10x score means the video has ten times as many
+            views as the channel has subscribers. YouTube rounds subscriber counts, so scores are estimates.
+            These thresholds are heuristics, not statistically validated benchmarks.
+          </p>
+          <p>
+            Outlier Finder reads displayed post metrics on YouTube, X and Instagram. Public profile requests omit cookies.
+            Displayed follower counts can also be learned when you view a profile or hovercard. Everything is stored locally.
+            Login walls, hidden counts and private profiles may prevent scoring.
+          </p>
+        </section>
+      </main>
+    </div>
+
+    <nav aria-label="Help"><a href="../pages/privacy.html" target="_blank" rel="noopener">Privacy</a> · <a href="../pages/support.html" target="_blank" rel="noopener">Support</a> · <a href="../pages/terms.html" target="_blank" rel="noopener">Terms</a></nav>
+    <script src="../core/settings.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>
